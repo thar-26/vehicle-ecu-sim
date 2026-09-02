@@ -1,0 +1,24 @@
+# Startup, then vehicle_speed_a simply stops arriving (models a bus
+# dropout on that source) while vehicle_speed_b keeps reporting. Past
+# the 500ms timeout registered on vehicle_speed_a, the safety monitor
+# should raise a timeout fault -- distinct from the sensor-disagreement
+# case in sensor_fault.txt.
+EVENT IgnitionOn
+SIGNAL vehicle_speed_a 0.0 0
+SIGNAL vehicle_speed_b 0.0 0
+EVENT InitializationComplete
+KICK 100
+SIGNAL vehicle_speed_a 3.0 300
+SIGNAL vehicle_speed_b 3.0 300
+TIME 400
+KICK 500
+SIGNAL vehicle_speed_a 6.0 600
+SIGNAL vehicle_speed_b 6.0 600
+KICK 700
+# no further vehicle_speed_a signals after this point
+SIGNAL vehicle_speed_b 6.5 750
+TIME 800
+KICK 800
+TIME 1300
+EVENT ShutdownRequest
+EVENT ShutdownComplete

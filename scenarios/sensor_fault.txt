@@ -1,0 +1,22 @@
+# Startup with agreeing sensors for a couple of cycles, then sensor B
+# jumps to a wildly different reading than sensor A -- a genuine
+# disagreement, not a step-timing artifact -- which should push the
+# vehicle into Degraded.
+EVENT IgnitionOn
+SIGNAL vehicle_speed_a 0.0 0
+SIGNAL vehicle_speed_b 0.0 0
+EVENT InitializationComplete
+KICK 100
+SIGNAL vehicle_speed_a 3.0 300
+SIGNAL vehicle_speed_b 3.0 300
+TIME 400
+KICK 500
+SIGNAL vehicle_speed_a 6.0 600
+SIGNAL vehicle_speed_b 6.5 600
+TIME 700
+KICK 800
+# Sensor B suddenly reports a wildly different speed than sensor A.
+SIGNAL vehicle_speed_b 90.0 900
+TIME 950
+EVENT ShutdownRequest
+EVENT ShutdownComplete
